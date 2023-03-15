@@ -22,15 +22,17 @@ for i in range(len(files)):
     data = pd.read_csv("./experimental_data/csv/" + files[i] + ".csv", names=["x", "y"])
     data = (data.iloc[86:])
     data = data.astype(float)
+    data = data.loc[data["x"] < 300]
 
     # Get the positions of the peaks
     peak_y = float(max(data.loc[data["x"] > 260]["y"]))
     peak_x = float(data.loc[data["y"] == peak_y]["x"])
     peak = {"x": peak_x, "y": peak_y}
+    print(peak)
 
     # Calculate the Concentration (Molarity : Molar Concentration)
     MolesOfSolute = (volume_solute[i]*Density)/MolarMass * ConcentrationInSolute
-    Molarity = MolesOfSolute/(volume_solvent + volume_solute[i]*(1 - ConcentrationInSolute)/1000)
+    Molarity = MolesOfSolute/(volume_solvent + volume_solute[i]/1000)
 
     # Join information in dictionary
     samples[files[i]] = {"peak": peak, "molarity": Molarity}
@@ -52,7 +54,7 @@ plt.show()
 molarity_x = []
 absorbance_y = []
 
-for i in range(len(files)):
+for i in range(0, len(files)):
     molarity_x.append(samples[files[i]]["molarity"])
     absorbance_y.append(samples[files[i]]["peak"]["y"])
 
