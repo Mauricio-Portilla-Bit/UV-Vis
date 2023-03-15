@@ -10,8 +10,9 @@ samples = {}
 volume_solute = [0.2, 0.6, 0.8, 1.0, 1.2, 1.5, 2.0]  # mL (cm^3)
 volume_solvent = 10/1000  # Liters
 
+ConcentrationInSolute = 0.05
 Density = 1.049  # g/cm^3
-MolarMass = 69.021  # g/mol
+MolarMass = 60.052  # g/mol
 
 # 1) GRAPH THE RESULTS
 
@@ -28,8 +29,8 @@ for i in range(len(files)):
     peak = {"x": peak_x, "y": peak_y}
 
     # Calculate the Concentration (Molarity : Molar Concentration)
-    MolesOfSolute = (volume_solute[i]*Density)/MolarMass
-    Molarity = MolesOfSolute/volume_solvent
+    MolesOfSolute = (volume_solute[i]*Density)/MolarMass * ConcentrationInSolute
+    Molarity = MolesOfSolute/(volume_solvent + volume_solute[i]*(1 - ConcentrationInSolute)/1000)
 
     # Join information in dictionary
     samples[files[i]] = {"peak": peak, "molarity": Molarity}
